@@ -1,0 +1,17 @@
+---
+layout: null
+permalink: /search.json
+---
+[
+{%- for p in site.posts -%}
+  {
+    "title": {{ p.title | jsonify }},
+    "url": {{ p.url | relative_url | jsonify }},
+    "date": {{ p.date | date: '%Y.%m.%d' | jsonify }},
+    "kind": {% if p.categories contains 'devlog' %}"개발일지"{% else %}"공부"{% endif %},
+    "tags": {{ p.tags | jsonify }},
+    "summary": {{ p.summary | default: "" | jsonify }},
+    "text": {{ p.content | strip_html | strip_newlines | truncate: 3000 | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+{%- endfor -%}
+]

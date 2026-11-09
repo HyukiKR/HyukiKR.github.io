@@ -1,0 +1,61 @@
+# ─────────────────────────────────────────────
+#  사이트 기본 정보 — 여기만 바꾸면 이름·소개가 전부 바뀝니다
+# ─────────────────────────────────────────────
+title: "Hyuki Dev Log"          # 사이트 이름
+description: "게임 개발 일지"
+author:
+  name: "Hyuki"
+  bio: "게임을 만들며 배운 것을 기록합니다"   # 사이드바 이름 아래 한 줄
+  avatar: "/assets/images/avatar.png"   # 이름 옆 아이콘 + 브라우저 탭 아이콘 (정사각형 그림 추천)
+  avatar_pixel: false                   # 픽셀아트면 true (확대해도 또렷하게), 일반 그림이면 false
+  email: "persumin@gmail.com"                         # 공개하고 싶을 때만 적으세요
+  github: "HyukiKR"
+  itch: ""                          # itch.io 아이디 (선택)
+  youtube: ""                       # 유튜브 채널 주소 (선택)
+
+# 홈 맨 위 소개 글. 마크다운으로 자유롭게 쓰면 됩니다.
+intro: |
+  게임 제작 과정과, 만들면서 필요해서 공부한 내용을 함께 기록하는 Dev Log입니다.
+  **개발일지**에는 게임별 제작 기록을, **공부**에는 그 과정에서 정리한 개념과 코드를 남깁니다.
+
+# GitHub Pages 주소
+#  - 저장소 이름이 <아이디>.github.io 이면 baseurl은 "" 그대로
+#  - 다른 이름(예: devlog)이면 baseurl: "/devlog"
+url: "https://HyukiKR.github.io"
+baseurl: ""
+
+lang: ko
+timezone: Asia/Seoul
+
+# ─────────────────────────────────────────────
+#  빌드 설정 (보통 건드릴 필요 없음)
+# ─────────────────────────────────────────────
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+permalink: /:categories/:year/:month/:day/:title/
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+defaults:
+  - scope: { path: "", type: posts }
+    values: { layout: post }
+  - scope: { path: "", type: projects }
+    values: { layout: project }
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+exclude:
+  - README.md
+  - templates
+  - Gemfile
+  - Gemfile.lock
+  - vendor

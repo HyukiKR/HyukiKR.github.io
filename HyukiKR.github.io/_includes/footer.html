@@ -1,0 +1,11 @@
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>&copy; {{ site.time | date: '%Y' }} {{ site.author.name }}. 직접 만들고, 직접 기록합니다.</p>
+    <ul class="links">
+      {% if site.author.github and site.author.github != "" %}<li><a href="https://github.com/{{ site.author.github }}">GitHub</a></li>{% endif %}
+      {% if site.author.itch and site.author.itch != "" %}<li><a href="https://{{ site.author.itch }}.itch.io">itch.io</a></li>{% endif %}
+      {% if site.author.youtube and site.author.youtube != "" %}<li><a href="{{ site.author.youtube }}">YouTube</a></li>{% endif %}
+      <li><a href="{{ '/feed.xml' | relative_url }}">RSS</a></li>
+    </ul>
+  </div>
+</footer>

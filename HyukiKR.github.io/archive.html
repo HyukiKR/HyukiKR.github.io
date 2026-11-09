@@ -1,0 +1,16 @@
+---
+layout: default
+title: 전체 기록
+permalink: /archive/
+---
+<h1 class="page-title">전체 기록 <span class="n">({{ site.posts.size }})</span></h1>
+
+{%- assign by_year = site.posts | group_by_exp: "p", "p.date | date: '%Y'" -%}
+{%- for y in by_year -%}
+<h2 class="year">{{ y.name }}</h2>
+<ul class="post-list">
+  {%- for p in y.items -%}{% include post-row.html post=p kind=true %}{%- endfor -%}
+</ul>
+{%- else -%}
+<p>아직 기록이 없습니다.</p>
+{%- endfor -%}
