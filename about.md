@@ -1,7 +1,7 @@
 ---
 layout: page
-title: 소개
 permalink: /about/
+title: 소개
 ---
 
 이 사이트는 게임을 만들면서 남기는 **Dev Log**입니다.
@@ -11,11 +11,6 @@ permalink: /about/
 - **개발일지**: 게임별 제작 기록. 무엇을 만들었고, 어디서 막혔고, 어떻게 풀었는지.
 - **공부**: 제작하면서 공부한 개념과 코드를 다시 정리한 노트.
 
-## 사용하는 도구
-
-- Unity, C#
-- Git, GitHub
-
-## 링크
+### 링크
 
 - [GitHub](https://github.com/HyukiKR)
