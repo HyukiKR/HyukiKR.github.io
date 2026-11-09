@@ -1,3 +1,30 @@
+// 나이트 모드 버튼: 누를 때마다 밝게/어둡게 바꾸고 이 브라우저에 기억
+(function () {
+  var root = document.documentElement;
+  var buttons = document.querySelectorAll('.theme-btn');
+  if (!buttons.length) return;
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function current() { return root.dataset.theme || (mq.matches ? 'dark' : 'light'); }
+  function label() {
+    var dark = current() === 'dark';
+    buttons.forEach(function (b) {
+      b.textContent = dark ? '라이트 모드' : '나이트 모드';
+      b.setAttribute('aria-pressed', String(dark));
+    });
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      label();
+    });
+  });
+  mq.addEventListener && mq.addEventListener('change', label);
+  label();
+})();
+
 // 작은 화면: 카테고리 메뉴 열고 닫기
 (function () {
   var btn = document.querySelector('.menu-btn');
