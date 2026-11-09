@@ -69,6 +69,23 @@ GitHub Pages로 무료로 올리는 Jekyll 블로그입니다. 컴퓨터에 아�
 
 GIF도 똑같습니다.
 
+## 3-1. 글쓰기 화면(/admin)으로 쓰기
+
+`https://HyukiKR.github.io/admin`에서 GitHub에 들어가지 않고 글을 쓸 수 있습니다.
+
+**처음 한 번: 토큰 만들기**
+1. GitHub → 오른쪽 위 프로필 → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**
+2. Repository access: **Only select repositories** → `HyukiKR.github.io`
+3. Permissions → Repository permissions → **Contents: Read and write**
+4. **Generate token** 후 나온 토큰을 복사 (다시 볼 수 없으니 안전한 곳에 보관)
+
+**글쓰기**
+1. `/admin` 접속 → **Sign In with Token** → 토큰 붙여넣기
+2. 왼쪽에서 개발일지/공부/게임을 고르고 **New**
+3. 다 쓰면 **Save** → 1~2분 뒤 사이트에 반영
+
+토큰은 이 브라우저에만 저장됩니다. 공용 컴퓨터에서는 쓰고 나서 로그아웃하세요. 설정은 `admin/config.yml`에 있습니다.
+
 ## 4. 게임 추가하기
 
 `templates/game-template.md` 내용을 복사해 `_projects/게임이름.md`로 새 파일을 만듭니다. `key`에 적은 값을 개발일지의 `project:`에 쓰면 그 게임 페이지에 기록이 모입니다.

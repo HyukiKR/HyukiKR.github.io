@@ -1,0 +1,132 @@
+# ─────────────────────────────────────────────
+#  글쓰기 화면(/admin) 설정
+#  GitHub 토큰으로 로그인해서 글을 쓰면, 이 저장소에 바로 저장됩니다.
+# ─────────────────────────────────────────────
+backend:
+  name: github
+  repo: HyukiKR/HyukiKR.github.io
+  branch: main
+  commit_messages:
+    create: "{{collection}} 추가: {{slug}}"
+    update: "{{collection}} 수정: {{slug}}"
+    delete: "{{collection}} 삭제: {{slug}}"
+    uploadMedia: "이미지 추가: {{path}}"
+    deleteMedia: "이미지 삭제: {{path}}"
+
+site_url: https://HyukiKR.github.io
+display_url: https://HyukiKR.github.io
+
+# 글에 넣은 이미지가 저장되는 곳
+media_folder: assets/images/uploads
+public_folder: /assets/images/uploads
+
+collections:
+  # ── 개발일지 ─────────────────────────────
+  - name: devlog
+    label: 개발일지
+    label_singular: 개발일지
+    folder: _posts
+    create: true
+    filter: { field: categories, value: devlog }
+    slug: "{{year}}-{{month}}-{{day}}-{{fields.url_name}}"
+    summary: "{{date | date('YYYY.MM.DD')}}  {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: categories, widget: hidden, default: devlog }
+      - { name: title, label: 제목, widget: string }
+      - name: url_name
+        label: 주소용 영문 이름
+        hint: "글 주소에 쓰입니다. 영문 소문자, 숫자, - 만 (예: first-boss)"
+        widget: string
+        pattern: ['^[a-z0-9-]+$', '영문 소문자, 숫자, - 만 쓸 수 있어요']
+      - { name: date, label: 날짜, widget: datetime }
+      - name: project
+        label: 게임
+        hint: 어느 게임의 개발일지인지 고르세요
+        widget: relation
+        collection: projects
+        value_field: key
+        search_fields: [title]
+        display_fields: [title]
+        required: false
+      - { name: build, label: 빌드 버전, widget: string, required: false, hint: "예: v0.4" }
+      - { name: tags, label: 태그, widget: list, required: false }
+      - { name: summary, label: 요약, widget: text, required: false, hint: 홈 목록에 보이는 한두 줄 }
+      - { name: image, label: 대표 이미지/GIF, widget: image, required: false, hint: 홈 목록에 크게 보입니다 }
+      - { name: body, label: 본문, widget: markdown }
+
+  # ── 공부 ─────────────────────────────────
+  - name: study
+    label: 공부
+    label_singular: 공부 노트
+    folder: _posts
+    create: true
+    filter: { field: categories, value: study }
+    slug: "{{year}}-{{month}}-{{day}}-{{fields.url_name}}"
+    summary: "{{date | date('YYYY.MM.DD')}}  {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: categories, widget: hidden, default: study }
+      - { name: title, label: 제목, widget: string }
+      - name: url_name
+        label: 주소용 영문 이름
+        hint: "글 주소에 쓰입니다. 영문 소문자, 숫자, - 만 (예: unity-coroutine)"
+        widget: string
+        pattern: ['^[a-z0-9-]+$', '영문 소문자, 숫자, - 만 쓸 수 있어요']
+      - { name: date, label: 날짜, widget: datetime }
+      - name: tags
+        label: 주제(태그)
+        hint: 첫 번째 태그가 이 글의 카테고리가 됩니다 (예. C#, Unity)
+        widget: list
+      - { name: summary, label: 요약, widget: text, required: false }
+      - { name: image, label: 대표 이미지, widget: image, required: false }
+      - { name: body, label: 본문, widget: markdown }
+
+  # ── 게임 ─────────────────────────────────
+  - name: projects
+    label: 게임
+    label_singular: 게임
+    folder: _projects
+    create: true
+    identifier_field: title
+    slug: "{{fields.key}}"
+    fields:
+      - name: key
+        label: 영문 이름
+        hint: "개발일지와 연결할 때 쓰는 이름이자 주소입니다. 영문 소문자, 숫자, - 만 (예: lantern-keeper)"
+        widget: string
+        pattern: ['^[a-z0-9-]+$', '영문 소문자, 숫자, - 만 쓸 수 있어요']
+      - { name: title, label: 게임 이름, widget: string }
+      - { name: pitch, label: 한 줄 소개, widget: string }
+      - name: status
+        label: 상태
+        widget: select
+        default: dev
+        options:
+          - { label: 개발 중, value: dev }
+          - { label: 출시, value: released }
+          - { label: 게임잼, value: jam }
+          - { label: 잠시 멈춤, value: paused }
+      - { name: order, label: 목록 순서, widget: number, default: 1, value_type: int, hint: 작을수록 앞에 보입니다 }
+      - { name: cover, label: 대표 스크린샷, widget: image, required: false, hint: 16:9 추천 }
+      - { name: genre, label: 장르, widget: string, required: false }
+      - { name: engine, label: 엔진, widget: string, default: Unity, required: false }
+      - { name: platform, label: 플랫폼, widget: string, required: false }
+      - { name: role, label: 맡은 일, widget: string, required: false }
+      - { name: period, label: 기간, widget: string, required: false, hint: "예: 2026.11 ~" }
+      - { name: play_url, label: 플레이 링크, widget: string, required: false }
+      - { name: repo, label: 소스 코드 링크, widget: string, required: false }
+      - { name: body, label: 소개 본문, widget: markdown, required: false }
+
+  # ── 소개 페이지 ──────────────────────────
+  - name: pages
+    label: 페이지
+    files:
+      - name: about
+        label: 소개
+        file: about.md
+        fields:
+          - { name: layout, widget: hidden, default: page }
+          - { name: permalink, widget: hidden, default: /about/ }
+          - { name: title, label: 제목, widget: string }
+          - { name: body, label: 본문, widget: markdown }
