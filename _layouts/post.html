@@ -1,0 +1,78 @@
+---
+layout: default
+---
+{%- assign is_devlog = false -%}{%- if page.categories contains "devlog" -%}{%- assign is_devlog = true -%}{%- endif -%}
+{%- if page.project -%}{%- assign proj = site.projects | where: "key", page.project | first -%}{%- endif -%}
+
+{%- comment -%} "같은 카테고리" = 개발일지는 같은 게임, 공부는 첫 번째 태그 {%- endcomment -%}
+{%- if is_devlog -%}
+  {%- assign base_url = '/devlog/' | relative_url -%}
+  {%- if page.project -%}
+    {%- assign group = site.categories.devlog | where: "project", page.project -%}
+    {%- capture group_name -%}{% if proj %}{{ proj.title }}{% else %}{{ page.project }}{% endif %}{%- endcapture -%}
+    {%- capture group_url -%}{{ base_url }}#{{ page.project }}{%- endcapture -%}
+  {%- else -%}
+    {%- assign group = site.categories.devlog | where_exp: "p", "p.project == nil" -%}
+    {%- assign group_name = "기타" -%}
+    {%- capture group_url -%}{{ base_url }}#etc{%- endcapture -%}
+  {%- endif -%}
+{%- else -%}
+  {%- assign base_url = '/study/' | relative_url -%}
+  {%- assign first_tag = page.tags | first -%}
+  {%- if first_tag -%}
+    {%- assign group = site.categories.study | where_exp: "p", "p.tags contains first_tag" -%}
+    {%- assign group_name = first_tag -%}
+    {%- capture group_url -%}{{ base_url }}#{{ first_tag | slugify: 'pretty' }}{%- endcapture -%}
+  {%- else -%}
+    {%- assign group = site.categories.study -%}
+    {%- assign group_name = "공부" -%}
+    {%- assign group_url = base_url -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- comment -%} 같은 카테고리 안에서 이전·다음 글 {%- endcomment -%}
+{%- assign newer = nil -%}{%- assign older = nil -%}
+{%- for s in group -%}
+  {%- if s.url == page.url -%}
+    {%- assign i_newer = forloop.index0 | minus: 1 -%}
+    {%- assign i_older = forloop.index0 | plus: 1 -%}
+    {%- if forloop.first == false -%}{%- assign newer = group[i_newer] -%}{%- endif -%}
+    {%- assign older = group[i_older] -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<article class="post">
+  <p class="crumbs">
+    <a href="{{ base_url }}">{% if is_devlog %}개발일지{% else %}공부{% endif %}</a>
+    <span aria-hidden="true">&gt;</span>
+    <a href="{{ group_url }}">{{ group_name }}</a>
+  </p>
+  <h1 class="post-title">{{ page.title }}</h1>
+  <p class="meta">
+    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%Y년 %-m월 %-d일' }}</time>
+    {%- if page.build %} | {{ page.build }}{% endif -%}
+    {%- if page.tags.size > 0 %} | 태그: {% for t in page.tags %}<a href="{{ '/search/' | relative_url }}?q={{ t | uri_escape }}">{{ t }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}
+  </p>
+
+  <div class="content">
+    {{ content }}
+  </div>
+</article>
+
+<nav class="post-nav" aria-label="이전·다음 글">
+  <span>{% if older %}<a href="{{ older.url | relative_url }}">&lt; {{ older.title }}</a>{% endif %}</span>
+  <span>{% if newer %}<a href="{{ newer.url | relative_url }}">{{ newer.title }} &gt;</a>{% endif %}</span>
+</nav>
+
+<section class="related">
+  <h2>'{{ group_name }}' 카테고리의 글 <span class="n">({{ group.size }})</span></h2>
+  <ul class="post-list">
+    {%- for p in group limit: 10 -%}
+    <li{% if p.url == page.url %} class="current"{% endif %}>
+      <time datetime="{{ p.date | date_to_xmlschema }}">{{ p.date | date: '%Y.%m.%d' }}</time>
+      {% if p.url == page.url %}<span>{{ p.title }}</span>{% else %}<a href="{{ p.url | relative_url }}">{{ p.title }}</a>{% endif %}
+    </li>
+    {%- endfor -%}
+  </ul>
+  {% if group.size > 10 %}<p><a href="{{ group_url }}">전체 보기</a></p>{% endif %}
+</section>

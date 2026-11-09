@@ -1,0 +1,79 @@
+{%- comment -%}
+  왼쪽 사이드바: 소개, 검색, 카테고리 트리(글 수), 최근 글
+  카테고리는 글 머리말(categories, project, tags)에서 자동으로 만들어집니다.
+{%- endcomment -%}
+{%- assign devlogs = site.categories.devlog -%}
+{%- assign studies = site.categories.study -%}
+{%- assign path = page.url -%}
+
+<div class="side-about">
+  <a class="site-title" href="{{ '/' | relative_url }}">
+    {%- if site.author.avatar -%}<img class="avatar{% if site.author.avatar_pixel %} pixel{% endif %}" src="{{ site.author.avatar | relative_url }}" alt="" width="40" height="40">{%- endif -%}
+    <span>{{ site.title }}</span>
+  </a>
+  {% if site.author.bio %}<p>{{ site.author.bio }}</p>{% endif %}
+</div>
+
+<form class="search-box" action="{{ '/search/' | relative_url }}" method="get" role="search">
+  <label for="q" class="sr-only">글 검색</label>
+  <input id="q" name="q" type="search" placeholder="검색" autocomplete="off">
+</form>
+
+<nav class="cat-tree" aria-label="카테고리">
+  <ul>
+    <li><a href="{{ '/archive/' | relative_url }}" {% if path == '/archive/' %}class="on"{% endif %}>전체 기록</a> <span class="n">({{ site.posts.size }})</span></li>
+
+    <li>
+      <a href="{{ '/devlog/' | relative_url }}" {% if path == '/devlog/' %}class="on"{% endif %}>개발일지</a> <span class="n">({{ devlogs.size | default: 0 }})</span>
+      {%- if devlogs.size > 0 -%}
+      {%- assign by_proj = devlogs | group_by: "project" -%}
+      <ul>
+        {%- for g in by_proj -%}
+          {%- if g.name and g.name != "" -%}
+            {%- assign pr = site.projects | where: "key", g.name | first -%}
+            <li><a href="{{ '/devlog/' | relative_url }}#{{ g.name }}">{% if pr %}{{ pr.title }}{% else %}{{ g.name }}{% endif %}</a> <span class="n">({{ g.items.size }})</span></li>
+          {%- else -%}
+            <li><a href="{{ '/devlog/' | relative_url }}#etc">기타</a> <span class="n">({{ g.items.size }})</span></li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+      {%- endif -%}
+    </li>
+
+    <li>
+      <a href="{{ '/study/' | relative_url }}" {% if path == '/study/' %}class="on"{% endif %}>공부</a> <span class="n">({{ studies.size | default: 0 }})</span>
+      {%- if studies.size > 0 -%}
+      {%- assign all_tags = "" | split: "" -%}
+      {%- for p in studies -%}{%- assign all_tags = all_tags | concat: p.tags -%}{%- endfor -%}
+      {%- assign all_tags = all_tags | uniq | sort -%}
+      <ul>
+        {%- for t in all_tags -%}
+        {%- assign n = 0 -%}{%- for p in studies -%}{%- if p.tags contains t -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor -%}
+        <li><a href="{{ '/study/' | relative_url }}#{{ t | slugify: 'pretty' }}">{{ t }}</a> <span class="n">({{ n }})</span></li>
+        {%- endfor -%}
+      </ul>
+      {%- endif -%}
+    </li>
+
+    <li><a href="{{ '/projects/' | relative_url }}" {% if path == '/projects/' %}class="on"{% endif %}>게임</a> <span class="n">({{ site.projects.size }})</span></li>
+    <li><a href="{{ '/about/' | relative_url }}" {% if path == '/about/' %}class="on"{% endif %}>소개</a></li>
+  </ul>
+</nav>
+
+{%- if site.posts.size > 0 -%}
+<div class="side-recent">
+  <h2>최근 기록</h2>
+  <ul>
+    {%- for p in site.posts limit: 5 -%}
+    <li><a href="{{ p.url | relative_url }}" {% if p.url == path %}class="on"{% endif %}>{{ p.title }}</a></li>
+    {%- endfor -%}
+  </ul>
+</div>
+{%- endif -%}
+
+<p class="side-links">
+  {% if site.author.github and site.author.github != "" %}<a href="https://github.com/{{ site.author.github }}">GitHub</a>{% endif %}
+  {% if site.author.itch and site.author.itch != "" %}<a href="https://{{ site.author.itch }}.itch.io">itch.io</a>{% endif %}
+  {% if site.author.youtube and site.author.youtube != "" %}<a href="{{ site.author.youtube }}">YouTube</a>{% endif %}
+  <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+</p>
