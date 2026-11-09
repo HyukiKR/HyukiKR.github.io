@@ -9,7 +9,10 @@
   function label() {
     var dark = current() === 'dark';
     buttons.forEach(function (b) {
-      b.textContent = dark ? '라이트 모드' : '나이트 모드';
+      var text = dark ? '라이트 모드' : '나이트 모드';
+      var span = b.querySelector('.theme-label');
+      if (span) span.textContent = text;
+      b.setAttribute('aria-label', text);
       b.setAttribute('aria-pressed', String(dark));
     });
   }
