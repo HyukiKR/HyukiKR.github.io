@@ -1,0 +1,22 @@
+---
+layout: default
+title: 플레이 기록
+permalink: /played/
+---
+<h1 class="page-title">플레이 기록 <span class="n">({{ site.played.size }})</span></h1>
+<p class="page-desc">지금까지 해본 게임을 정리합니다. 게임 이름을 누르면 평가와 감상을 볼 수 있습니다.</p>
+
+{%- assign games = site.played | sort: "finished", "first" | reverse -%}
+{%- if games.size > 0 -%}
+<ul class="play-list">
+  {%- for g in games -%}
+  <li>
+    <time {% if g.finished %}datetime="{{ g.finished | date: '%Y-%m-%d' }}"{% endif %}>{% if g.finished %}{{ g.finished | date: '%Y.%m' }}{% endif %}</time>
+    <a class="play-title" href="{{ g.url | relative_url }}">{{ g.title }}</a>
+    {%- if g.rating -%}{% include stars.html rating=g.rating %}{%- endif -%}
+  </li>
+  {%- endfor -%}
+</ul>
+{%- else -%}
+<p>아직 기록이 없습니다.</p>
+{%- endif -%}

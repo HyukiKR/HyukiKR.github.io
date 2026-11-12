@@ -14,6 +14,7 @@
   --code-border: #e1e4e8;
   --devlog: #2b7a3d;
   --study: #8a4baf;
+  --star: #c98a00;
   --hl-comment: #6a737d;
   --hl-keyword: #d73a49;
   --hl-type: #6f42c1;
@@ -33,6 +34,8 @@
     --code-border: #38393e;
     --devlog: #6fcf87;
     --study: #c79af0;
+  --star: #f2c14e;
+    --star: #f2c14e;
     --hl-comment: #8b949e;
     --hl-keyword: #ff7b72;
     --hl-type: #d2a8ff;
@@ -208,6 +211,21 @@ code, pre, time { font-family: D2Coding, "D2 coding", Consolas, monospace; }
 
 /* 꼬리말 */
 .site-footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--gray); font-size: 13px; }
+
+/* 플레이 기록 */
+.side-play { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.side-play h2 { font-size: 13.5px; color: var(--gray); margin: 0 0 6px; font-weight: 600; }
+.side-play a { color: var(--text); text-decoration: none; font-weight: 600; }
+.side-play a:hover { color: var(--link); text-decoration: underline; }
+.side-play a.on { color: var(--link); }
+
+.play-list { list-style: none; margin: 8px 0 0; padding: 0; }
+.play-list li { display: flex; align-items: baseline; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--rule); }
+.play-list li:last-child { border-bottom: 0; }
+.play-list time { flex: none; width: 56px; color: var(--gray); font-size: 14px; }
+.play-title { flex: 1; min-width: 0; font-size: 17px; font-weight: 600; }
+.stars { color: var(--star); font-size: 14px; letter-spacing: 1px; white-space: nowrap; }
+.scores th { width: 110px; }
 
 /* 코드 하이라이트 (GitHub 비슷한 색) */
 .highlight .c, .highlight .c1, .highlight .cm, .highlight .cs { color: var(--hl-comment); font-style: italic; }

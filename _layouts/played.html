@@ -1,0 +1,66 @@
+---
+layout: default
+---
+{%- comment -%}
+  플레이 기록 한 편. /admin에서 나눠 쓴 칸들이 아래 순서대로 보입니다.
+  평가 항목 이름을 바꾸려면 아래 score_items 와 admin/config.yml 을 함께 고치세요.
+{%- endcomment -%}
+{%- assign score_items = "gameplay:게임플레이,controls:조작감,graphics:그래픽,sound:사운드,story:스토리" | split: "," -%}
+
+<article class="post">
+  <p class="crumbs"><a href="{{ '/played/' | relative_url }}">플레이 기록</a></p>
+  <h1 class="post-title">{{ page.title }}</h1>
+  {%- if page.rating -%}
+  <p class="meta">{% include stars.html rating=page.rating %}</p>
+  {%- endif -%}
+
+  {% if page.cover %}<img class="cover" src="{{ page.cover | relative_url }}" alt="{{ page.title }} 스크린샷">{% endif %}
+
+  <div class="content">
+    {% if page.oneline %}<p class="lead">{{ page.oneline }}</p>{% endif %}
+
+    <table class="facts">
+      {% if page.platform %}<tr><th>플랫폼</th><td>{{ page.platform }}</td></tr>{% endif %}
+      {% if page.genre %}<tr><th>장르</th><td>{{ page.genre }}</td></tr>{% endif %}
+      {% if page.developer %}<tr><th>개발사</th><td>{{ page.developer }}</td></tr>{% endif %}
+      {% if page.hours %}<tr><th>플레이 시간</th><td>{{ page.hours }}시간</td></tr>{% endif %}
+      {% if page.finished %}<tr><th>플레이한 날</th><td>{{ page.finished | date: '%Y.%m.%d' }}</td></tr>{% endif %}
+    </table>
+
+    {%- if page.scores -%}
+    <h2>항목별 평가</h2>
+    <table class="facts scores">
+      {%- for it in score_items -%}
+        {%- assign kv = it | split: ":" -%}
+        {%- assign v = page.scores[kv[0]] -%}
+        {%- if v -%}<tr><th>{{ kv[1] }}</th><td>{% include stars.html rating=v %}</td></tr>{%- endif -%}
+      {%- endfor -%}
+    </table>
+    {%- endif -%}
+
+    {%- if page.good -%}
+    <h2>좋았던 점</h2>
+    {{ page.good | markdownify }}
+    {%- endif -%}
+
+    {%- if page.bad -%}
+    <h2>아쉬운 점</h2>
+    {{ page.bad | markdownify }}
+    {%- endif -%}
+
+    {%- if page.learned -%}
+    <h2>만드는 사람으로서 배운 점</h2>
+    {{ page.learned | markdownify }}
+    {%- endif -%}
+
+    {%- assign memo = content | strip -%}
+    {%- if memo != "" -%}
+    <h2>메모</h2>
+    {{ content }}
+    {%- endif -%}
+  </div>
+</article>
+
+<nav class="post-nav">
+  <span><a href="{{ '/played/' | relative_url }}">&lt; 플레이 기록 목록</a></span>
+</nav>

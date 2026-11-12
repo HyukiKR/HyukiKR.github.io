@@ -60,6 +60,12 @@
   </ul>
 </nav>
 
+{%- comment -%} 플레이 기록은 개발 기록과 따로 떨어진 칸에 {%- endcomment -%}
+<nav class="side-play" aria-label="플레이 기록">
+  <h2>게임 플레이</h2>
+  <a href="{{ '/played/' | relative_url }}" {% if path contains '/played/' %}class="on"{% endif %}>플레이 기록</a> <span class="n">({{ site.played.size }})</span>
+</nav>
+
 {%- if site.posts.size > 0 -%}
 <div class="side-recent">
   <h2>최근 기록</h2>
